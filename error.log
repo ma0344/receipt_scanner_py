@@ -1,0 +1,34 @@
+エラーが発生しました。
+エラーコード：<class 'AttributeError'>
+エラー内容：'MainWindow' object has no attribute 'data_dir'
+Traceback (most recent call last):
+  File "C:\Users\ma\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 198, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ma\AppData\Local\Programs\Python\Python311\Lib\runpy.py", line 88, in _run_code
+    exec(code, run_globals)
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher/../..\debugpy\__main__.py", line 39, in <module>
+    cli.main()
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 430, in main
+    run()
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher/../..\debugpy/..\debugpy\server\cli.py", line 284, in run_file
+    runpy.run_path(target, run_name="__main__")
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 321, in run_path
+    return _run_module_code(code, init_globals, run_name,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 135, in _run_module_code
+    _run_code(code, mod_globals, init_globals,
+  File "c:\Users\ma\.vscode\extensions\ms-python.debugpy-2024.0.0-win32-x64\bundled\libs\debugpy\_vendored\pydevd\_pydevd_bundle\pydevd_runpy.py", line 124, in _run_code
+    exec(code, run_globals)
+  File "receipt_scanner.pyw", line 1387, in <module>
+    mainWindow = MainWindow()
+                 ^^^^^^^^^^^^
+  File "receipt_scanner.pyw", line 365, in __init__
+    self.receiptList_model: QStandardItemModel = ui_settings.apply_settings(self)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ma\source\repos\receipt_scanner_py\ui_settings.py", line 380, in apply_settings
+    file_TreeView_Initialize(self, True)
+  File "C:\Users\ma\source\repos\receipt_scanner_py\ui_settings.py", line 237, in file_TreeView_Initialize
+    current_Index = model.index(self.data_dir)
+                                ^^^^^^^^^^^^^
+AttributeError: 'MainWindow' object has no attribute 'data_dir'

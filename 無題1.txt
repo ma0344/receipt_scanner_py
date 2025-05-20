@@ -1,0 +1,429 @@
+from PySide6.QtGui import QFont, QColor, QKeyEvent, QMouseEvent
+from PySide6.QtWidgets import QTableWidgetItem, QGroupBox, QLabel, QTimeEdit, QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QDateEdit, QDialog
+from enum import Enum
+from PySide6 import QtWidgets
+from PySide6.QtCore import Qt, QObject, QEvent, Signal, QDateTime, QTimer
+from datetime import datetime
+from typing import Type
+
+
+class Category(Enum):
+    In = 0
+    Out = 1
+
+
+class CustomItem(QTableWidgetItem):
+    class Address:
+        def __init__(self, x=0, y=0):
+            self.x = x
+            self.y = y
+
+    def __init__(self, data=None, x=0, y=0, cell_date: datetime = None):
+        super().__init__()
+        self._type = 0
+        self.day_start_time = None
+        self.day_end_time = None
+        self.night_start_time = None
+        self.night_end_time = None
+        self.address = self.Address(x, y)
+        self.cell_date = cell_date
+        self.cell_weekday = None
+        font = QFont()
+        font.setWeight(QFont.Bold)
+        font.setPointSize(19)
+        self.setFont(font)
+        self.setTextAlignment(Qt.AlignCenter)
+        self.signal = SignalHolder()
+        if self.cell_date is not None:
+            self.cell_weekday = self.cell_date.strftime("%a")
+
+            if self.cell_weekday == "土":
+                self.setBackground(QColor(224, 255, 255, 200))
+
+            elif self.cell_weekday == "日":
+                self.setBackground(QColor(255, 240, 245, 200))
+
+        def toDate(time: str) -> datetime: return datetime.strptime(time if isinstance(time, str) else datetime.strftime(time, "%Y/%m/%d %H:%M") if isinstance(time, datetime) else None, "%Y/%m/%d %H:%M") if time is not None else None
+
+        if data is not None:
+            self.type = data["type"]
+            self.day_start_time = toDate(data["day_start_time"])
+            self.day_end_time = toDate(data["day_end_time"])
+            self.night_start_time = toDate(data["night_start_time"])
+            self.night_end_time = toDate(data["night_end_time"])
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        self._type = value
+        self.setText(self.setSymbol())
+        self.signal.typeChanged.emit()
+
+    def to_dict(self):
+        def timeStr(time):
+            time = pyDateTime(time)
+            if time is None:
+                return None
+            elif isinstance(time, datetime):
+                return datetime.strftime(time, "%Y/%m/%d %H:%M")
+            elif isinstance(time, str):
+                return datetime.strptime(time, "%Y/%m/%d %H:%M")
+            else:
+                None
+            # return None if time is None else datetime.strftime(time if isinstance(time, datetime) else datetime.strptime(time, "%Y/%m/%d %H:%M") if isinstance(time, str) else None, "%Y/%m/%d %H:%M") if time is not None else None
+        return {
+            "type": self.type,
+            "day_start_time": timeStr(self.day_start_time),
+            "day_end_time": timeStr(self.day_end_time),
+            "night_start_time": timeStr(self.night_start_time),
+            "night_end_time": timeStr(self.night_end_time)
+        }
+
+    def setSymbol(self):
+        if self.type == 0:
+            return ""
+        elif self.type == 1:
+            return "◎"
+        elif self.type == 2:
+            return "○"
+        elif self.type == 3:
+            return "◓"
+
+    def copy_from_self(self, new_data: Type['CustomItem']):
+
+        new_data.type = self.type
+        new_data.day_start_time = self.day_start_time
+        new_data.day_end_time = self.day_end_time
+        new_data.night_start_time = self.night_start_time
+        new_data.night_end_time = self.night_end_time
+        new_data.address = self.address
+        new_data.cell_date = self.cell_date
+        new_data.cell_weekday = self.cell_weekday
+        new_data.setFont(self.font())
+        new_data.setTextAlignment(self.textAlignment())
+        new_data.setBackground(self.background())
+        new_data.setForeground(self.foreground())
+        return new_data
+
+
+class SignalHolder(QObject):
+    textChanged = Signal()
+    typeChanged = Signal()
+
+
+class CustomLabel(QLabel):
+    def __init__(self, text: str = None, datetime: datetime = None, Palette=None, parent: QWidget = None):
+        self.__DateTime: Type['datetime'] = datetime
+        self.Palette = Palette
+        super().__init__(text=text, parent=parent)
+
+        if self.__DateTime is not None:
+            self.setText(self.__DateTime.strftime("%#H:%M"))
+
+    def setDateTime(self, dateTime: datetime = None, Palette=None):
+        pyDate = dateTime if isinstance(dateTime, datetime) else pyDateTime(dateTime)
+        self.Palette = Palette
+        self.__DateTime = pyDate
+        self.setText(pyDate.strftime("%#H:%M"))
+
+    def getDateTime(self):
+        return self.__DateTime
+
+    def setTextColor(self, color: str = None):
+        fontSize = self.font().pointSize()
+        if color is None:
+            self.setStyleSheet("")
+            self.setPalette(self.Palette)
+            font = QFont()
+            font.setPointSize(fontSize)
+            self.setFont(font)
+        else:
+            self.setStyleSheet(f"color: {color};font-size: {fontSize}pt")
+
+
+class EditableTimeLabel(QWidget):
+    labelChanged = Signal(object)
+
+    def __init__(self, parent=None, In=None, Out=None):
+        super().__init__(parent)
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        font = QFont()
+        font.setPointSize(15)
+        self.timeEdit = QTimeEdit(self)
+        self.timeEdit.setDisplayFormat("H:mm")
+        self.timeEdit.editingFinished.connect(self.timeEditFinished)
+        self.timeEdit.setFont(font)
+        # 初期は非表示
+        self.timeEdit.setVisible(False)
+
+        self.label = CustomLabel(datetime=pyDateTime(self.timeEdit.dateTime()))
+        # self.label.setAlignment(Qt.AlignCenter)
+        self.setFont(font)
+        self.setText(None)
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.timeEdit)
+
+        self.clickTimer = QTimer(self)
+        self.clickTimer.setSingleShot(True)
+        self.clickTimer.timeout.connect(self.clickHandler)
+        self.clickTimerInterval = 100
+
+        self.inDateTime: datetime = In
+        self.outDateTime: datetime = Out
+        self.category: Category = None
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        return super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        if event.button() == Qt.LeftButton:
+            if self.objectName() == "night_end_time_label":
+                if not self.clickTimer.isActive():
+                    self.clickTimer.start(self.clickTimerInterval)
+                pass
+            else:
+                self.showTimeEdit()
+        return super().mouseReleaseEvent(event)
+
+    def mouseDoubleClickEvent(self, event: QMouseEvent) -> None:
+        self.clickTimer.stop()
+        if self.objectName() == "night_end_time_label":
+
+            self.showDateTimeDialog(self.label)
+            pass
+        else:
+            self.showTimeEdit()
+        # return True
+        return super().mouseDoubleClickEvent(event)
+
+    def clickHandler(self):
+        self.showTimeEdit()
+
+    def showTimeEdit(self):
+        self.label.setVisible(False)
+        self.timeEdit.setVisible(True)
+        self.timeEdit.setFocus()
+
+    def hideTimeEdit(self):
+        self.label.setVisible(True)
+        self.timeEdit.setVisible(False)
+
+    def showDateTimeDialog(self, obj: CustomLabel):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("日付と時間の編集")
+        layout = QHBoxLayout(dialog)
+        font = QFont()
+        font.setPointSize(15)
+        dateEdit = QDateEdit(dialog)
+        dateEdit.setFont(font)
+        dateEdit.setCalendarPopup(True)
+        dateEdit.setMinimumDate(qDateTime(self.inDateTime).date())
+        dateEdit.setMaximumDate(qDateTime(self.inDateTime).addDays(1).date())
+        dateEdit.setKeyboardTracking(True)
+        layout.addWidget(dateEdit)
+        dateEdit.editingFinished.connect(lambda: self.dateTimeEditFinished(dateEdit, dialog))
+
+        # 日付と時間を現在の日時に設定
+        dateEdit.setDate(obj.getDateTime().date())
+        dialog.exec()
+
+    def timeEditFinished(self):
+        qtimeValue: QDateTime = self.timeEdit.dateTime()
+        pyDateTimeTime: datetime = pyDateTime(qtimeValue)
+
+        self.hideTimeEdit()
+        self.label.setText(pyDateTimeTime.strftime("%#H:%M"))
+
+        if self.category == Category.In:
+            self.inDateTime = pyDateTimeTime
+        elif self.category == Category.Out:
+            self.outDateTime = pyDateTimeTime
+
+        self.setDateTime(category=self.category, inDateTime=self.inDateTime, outDateTime=self.outDateTime)
+        self.labelChanged.emit([self])
+
+    def dateTimeEditFinished(self, dateEdit: QDateEdit = None, dialog: QDialog = None):
+        self.setEndDate(dateEdit, dialog)
+
+    def setEndDate(self, dateEdit: QDateEdit = None, dialog: QDialog = None):
+        # if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+        selectedDateTime = datetime.strptime(dateEdit.date().toString("yyyy/MM/dd ") + self.timeEdit.time().toString("H:mm"), "%Y/%m/%d %H:%M")
+
+        self.setDateTime(category=Category.Out, inDateTime=self.inDateTime, outDateTime=selectedDateTime)
+
+        # dateEdit.keyReleaseEvent = None
+        dialog.close()
+
+        self.hideTimeEdit()
+        pass
+
+    def setDateTime(self, thisLabelDateTime: datetime):
+        if thisLabelDateTime is None:
+            self.timeEdit.setDateTime(None)
+            self.label.setText(None)
+            self.category = category
+        else:
+            self.inDateTime = inDateTime
+            self.outDateTime = outDateTime
+            if category == Category.In:
+                thisLabelDate = inDateTime
+            elif category == Category.Out:
+                thisLabelDate = outDateTime
+            self.timeEdit.setDateTime(qDateTime(thisLabelDate))
+            self.timeEdit.setTime(thisLabelDate.time())
+            parent: QWidget = self.parent()
+            palette = parent.palette()
+            self.label.setDateTime(thisLabelDate, palette)
+            self.labelChanged.emit([self])
+            pass
+            if inDateTime > outDateTime:
+                self.label.setTextColor("red")
+            else:
+                self.label.setTextColor(None)
+
+    def _setDateTime(self, category: Category, inDateTime: datetime, outDateTime=None):
+        if category is None or inDateTime is None or outDateTime is None:
+            self.timeEdit.setDateTime(None)
+            self.label.setText(None)
+            self.category = category
+        else:
+            self.inDateTime = inDateTime
+            self.outDateTime = outDateTime
+            if category == Category.In:
+                thisLabelDate = inDateTime
+            elif category == Category.Out:
+                thisLabelDate = outDateTime
+            self.timeEdit.setDateTime(qDateTime(thisLabelDate))
+            self.timeEdit.setTime(thisLabelDate.time())
+            parent: QWidget = self.parent()
+            palette = parent.palette()
+            self.label.setDateTime(thisLabelDate, palette)
+            self.labelChanged.emit([self])
+            pass
+            if inDateTime > outDateTime:
+                self.label.setTextColor("red")
+            else:
+                self.label.setTextColor(None)
+
+
+    def setText(self, string: str):
+        if string == "" or string is None:
+            self.timeEdit.setDateTime(None)
+            self.label.setText(None)
+        else:
+            self.timeEdit.setDateTime(datetime.strptime(string, "%Y/%m/%d %H:%M"))
+            self.label.setText(pyDateTime(self.timeEdit).strftime("%H:%M"))
+
+
+def pyDateTime(qtimeValue: QDateTime) -> datetime:
+    if isinstance(qtimeValue, QDateTime):
+        return datetime(qtimeValue.date().year(), qtimeValue.date().month(), qtimeValue.date().day(), qtimeValue.time().hour(), qtimeValue.time().minute())
+    else:
+        return qtimeValue
+
+
+def qDateTime(dateTime: datetime) -> QDateTime:
+    if isinstance(dateTime, datetime):
+        return QDateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute, 0)
+    else:
+        return dateTime
+
+
+class ColumnHeaderItem(QTableWidgetItem):
+    def __init__(self, text, col=0):
+        super().__init__(text, col)
+        self.col = col
+        self.signals = SignalHolder()
+        self.setText(text)
+
+    def setText(self, text):
+        super().setText(text)
+        if "土" in text:
+            self.setBackground(QColor(224, 255, 255, 200))
+            self.setForeground(Qt.blue)
+
+        elif "日" in text:
+            self.setBackground(QColor(255, 240, 245, 200))
+            self.setForeground(Qt.red)
+
+        self.signals.textChanged.emit()
+
+
+class CustomGroupBox(QGroupBox):
+    def __init__(self, parent=None):
+        super(CustomGroupBox, self).__init__(parent)
+        self.mainWindow = self.parent().parent()
+
+        self.item: CustomItem = None
+        self.day_start_time_label: EditableTimeLabel = None
+        self.day_end_time_label: EditableTimeLabel = None
+        self.night_start_time_label: EditableTimeLabel = None
+        self.night_end_time_label: EditableTimeLabel = None
+        self.setItemFlag = False
+
+    def setItem(self, item: CustomItem):
+        self.setItemFlag = True
+        self.item = item
+        row = item.address.y
+        mainWindow = self.mainWindow
+        name_label: CustomLabel = mainWindow.name_label
+        date_label: CustomLabel = mainWindow.date_label
+        tableWidget: QTableWidget = mainWindow.tableWidget
+        rowHeaderItem: QtWidgets.QTableWidgetItem = tableWidget.verticalHeaderItem(row)
+        name_label.setText(rowHeaderItem.text())
+        date_label.setText(item.cell_date.strftime("%#Y年%#m月%#d日(%a)"))
+
+        self.day_start_time_label.setDateTime(category=Category.In, inDateTime=item.day_start_time, outDateTime=item.day_end_time)
+        self.day_end_time_label.setDateTime(category=Category.Out, inDateTime=item.day_start_time, outDateTime=item.day_end_time)
+        self.night_start_time_label.setDateTime(category=Category.In, inDateTime=item.night_start_time, outDateTime=item.night_end_time)
+        self.night_end_time_label.setDateTime(category=Category.Out, inDateTime=item.night_start_time, outDateTime=item.night_end_time)
+        self.setItemFlag = False
+
+    def valueChanged(self, object):
+        if self.setItemFlag:
+            return
+        label: EditableTimeLabel = object[0]
+        label_name = label.objectName()
+        value = pyDateTime(label.timeEdit.dateTime())
+        if label_name == "day_start_time_label":
+            self.item.day_start_time = value
+        elif label_name == "day_end_time_label":
+            self.item.day_end_time = value
+        elif label_name == "night_start_time_label":
+            self.item.night_start_time = value
+        elif label_name == "night_end_time_label":
+            self.item.night_end_time = value
+        print(object[0].objectName())
+        # self.item
+        self.mainWindow.tableData.saveAsJson(fileName=self.mainWindow.tableData.fileName)
+
+    def setupAdditionalUI(self, mainWindow):
+        horizontalLayoutWidget: QHBoxLayout = mainWindow.horizontalLayoutWidget_4
+        start_labels_layout: QVBoxLayout = mainWindow.start_labels_layout
+        end_labels_layout: QVBoxLayout = mainWindow.end_labels_layout
+
+        self.day_start_time_label = mainWindow.day_start_time_label = EditableTimeLabel(horizontalLayoutWidget)
+        self.day_start_time_label.setObjectName(u"day_start_time_label")
+        self.day_start_time_label.labelChanged.connect(self.valueChanged)
+        start_labels_layout.addWidget(self.day_start_time_label, 0, Qt.AlignCenter | Qt.AlignCenter)
+
+        self.night_start_time_label = mainWindow.night_start_time_label = EditableTimeLabel(horizontalLayoutWidget)
+        self.night_start_time_label.setObjectName(u"night_start_time_label")
+        self.night_start_time_label.labelChanged.connect(self.valueChanged)
+        start_labels_layout.addWidget(self.night_start_time_label, 0, Qt.AlignCenter | Qt.AlignCenter)
+
+        self.day_end_time_label = mainWindow.day_end_time_label = EditableTimeLabel(horizontalLayoutWidget)
+        self.day_end_time_label.setObjectName(u"day_end_time_label")
+        self.day_end_time_label.labelChanged.connect(self.valueChanged)
+        end_labels_layout.addWidget(self.day_end_time_label, 0, Qt.AlignRight | Qt.AlignCenter)
+
+        self.night_end_time_label = mainWindow.night_end_time_label = EditableTimeLabel(horizontalLayoutWidget)
+        self.night_end_time_label.setObjectName(u"night_end_time_label")
+        self.night_end_time_label.labelChanged.connect(self.valueChanged)
+        end_labels_layout.addWidget(self.night_end_time_label, 0, Qt.AlignRight | Qt.AlignCenter)
+
+        pass

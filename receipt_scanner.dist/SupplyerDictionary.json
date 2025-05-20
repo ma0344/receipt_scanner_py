@@ -1,0 +1,370 @@
+{
+    "ツルヤ": {
+        "Values": [
+            "0263-59-6811",
+            "0263-29-4611",
+            "TSURUYA",
+            ".*SURUYA",
+            ".*URUYA",
+            ".*RUYA",
+            "ツルヤ",
+            "シルヤ",
+            "ンルヤ"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "綿半": {
+        "Values": [
+            "VYATAHAN",
+            "VVAIAHAN",
+            "VATAHAN",
+            "WAIAHAN",
+            "0263-58-6363",
+            "58-6363",
+            "T4100001003772"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計.*点"
+        ]
+    },
+    "デリシア": {
+        "Values": [
+            "DrericiA",
+            "FOODMARKET",
+            "27-1881",
+            "263-27-1881",
+            "0263-27-1881",
+            "0263-92-5545",
+            "デリシア",
+            "テリシア"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計 "
+        ]
+    },
+    "ラ・ムー": {
+        "Values": [
+            "0263-29-1033",
+            "MEGA DISCOUNT LAND"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "信光石油": {
+        "Values": [
+            "0263-35-2525"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "西友": {
+        "Values": [
+            "SEIYU",
+            "0263-27-7411",
+            "西友"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "ウェルシア": {
+        "Values": [
+            "welcia",
+            "0263*24*0005",
+            "T3030001002411"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "ダイレックス": {
+        "Values": [
+            "ダイレックス",
+            ".*0263.*88.*8814"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "くるまやラーメン": {
+        "Values": [
+            "0263-28-0U660",
+            "0263-28-0660",
+            "0263-28-066U",
+            "0263-28-U660",
+            "U263-28-0660"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計"
+        ]
+    },
+    "丸亀製麺": {
+        "Values": [
+            "0263-58-3866",
+            "村井町北2-1-73"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計",
+            "含計"
+        ]
+    },
+    "エネオス": {
+        "Values": [
+            "0263-26-8716",
+            "長野県松本市石芝3丁目8ー2",
+            "野口石油"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計"
+        ]
+    },
+    "ユーパレット": {
+        "Values": [
+            "ユーパレット",
+            "0263-24-1351"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計",
+            "税含計"
+        ]
+    },
+    "イオン": {
+        "Values": [
+            "4180001101313",
+            "イオン",
+            "O263-85-0011",
+            "0263-85-0011",
+            "0263-58-0017",
+            "0263-77-6611",
+            "0263-77-6589"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "カインズ": {
+        "Values": [
+            "4180001101313",
+            "0263-78-6111",
+            "カインズ"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "シャトレーゼ": {
+        "Values": [
+            "0263- 26-0288",
+            "0263-26-0288"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計",
+            "税含計"
+        ]
+    },
+    "西源": {
+        "Values": [
+            "0263-57-8800",
+            "O263-57-8800"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "ほっともっと": {
+        "Values": [
+            "HottoMotto",
+            "ほっともっと",
+            "0263-26-9735"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計",
+            "税含計"
+        ]
+    },
+    "とをしや": {
+        "Values": [
+            "TOWOSHIYA",
+            "0263-24-2288",
+            "とをしや"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "原信": {
+        "Values": [
+            "原信",
+            "T4110001024561",
+            "0263-71-1525"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計.*点"
+        ]
+    },
+    "ドン・キホーテ": {
+        "Values": [
+            "東京都目黒区青葉台2-19-10",
+            "0570-028-811"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "差引合計",
+            "合計"
+        ]
+    },
+    "ウエルシア": {
+        "Values": [
+            "0120-119-358"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "税合計",
+            "税含計"
+        ]
+    },
+    "サンロード": {
+        "Values": [
+            "0266-26-4136"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "バロー": {
+        "Values": [
+            "0263-24-3677"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計",
+            "消費税等"
+        ]
+    },
+    "凌駕": {
+        "Values": [
+            "凌駕",
+            "凌駕IDEA",
+            "0263-28-6300",
+            "8100002025779"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "セブンイレブン": {
+        "Values": [
+            "0263-86-3322"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "税率8",
+            "税率10"
+        ]
+    },
+    "かつや": {
+        "Values": [
+            "0263-31-0853",
+            "かつや"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "JA松本ハイランド": {
+        "Values": [
+            "JA松本ハイランド"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "金太郎ラーメン": {
+        "Values": [
+            "金太郎"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "test": {
+        "Values": [
+            "test"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "test"
+        ]
+    },
+    "イトーヨーカドー": {
+        "Values": [
+            "0263-27-8111"
+        ],
+        "CalculationMethod": "Sum",
+        "CalculationLabels": [
+            "小計.*点"
+        ]
+    },
+    "丸山食堂": {
+        "Values": [
+            "0263-25-00"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "ダイソー": {
+        "Values": [
+            "DAISO",
+            "ダイソー"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    },
+    "ビッグ１": {
+        "Values": [
+            "0266-28-9927"
+        ],
+        "CalculationMethod": "Direct",
+        "CalculationLabels": [
+            "合計"
+        ]
+    }
+}

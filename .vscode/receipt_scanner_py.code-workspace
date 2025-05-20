@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+    ],
+    "settings": {
+        "generateCodeUsingGemini.geminiToken": "AIzaSyAj3BUteGl--yuOzyyeoNaPEOzB8uW6vQg",
+        "generateCodeUsingGemini.isGenerating": true
+    }
+}

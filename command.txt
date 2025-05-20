@@ -1,0 +1,1 @@
+-l "jp_receipt+Jpscript-best" --oem 1 --psm 6 --dpi 300 --tessdata-dir "C:\Users\ma\Desktop\ReceiptScanner\tessData"
